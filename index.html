@@ -11,9 +11,9 @@
   <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
 
   <style>
-    /* THEME - Make colour tweaks across the page */
+    /* THEME */
     :root { --fg:#111; --muted:#444; --bg:#e6f2ff; }
-    * { box-sizing: border-box; } /* predictable layout - border inside width/height */
+    * { box-sizing: border-box; } /* border inside width/height */
 
     /* Base typography + page background */
     body {
@@ -25,7 +25,7 @@
     header, .viz-wrap, .footer { max-width:1100px; margin:0 auto; }
     header { margin-bottom:16px; text-align:center; }
 
-    /* Big, title-like H1 to satisfy “clear title” rubric */
+    /* Big Title-like H1 to satisfy “clear title” rubric */
     h1 {
       margin:0 0 8px 0;
       font-size:48px; font-weight:800; letter-spacing:1px; text-transform:uppercase;
@@ -132,7 +132,7 @@
       <ul style="margin:0 0 0 18px;padding:0">
         <li><strong>Concentration & Reporting:</strong> Records cluster along high traffic routes and various regions.</li>
         <li><strong>Safety Improvements:</strong> Fatalities and crash counts decline markedly post 1980s.</li>
-        <li><strong>Severity Envelope:</strong> Most events fall well below the “all aboard” line — catastrophic events are rare.</li>
+        <li><strong>Severity Envelope:</strong> Most events fall well below the “all aboard” line; catastrophic events are rare.</li>
         <li><strong>Seasonality & Operators:</strong> Subtle monthly trends emerge and a few operators dominate historic totals.</li>
       </ul>
     </div>
@@ -171,7 +171,7 @@
   <div class="callout"><strong>Context:</strong> Operator counts depend on fleet size, routes, and reporting era.</div>
 </div>
 
-<!-- FOOTER / METADATA (provenance + last updated to meet rubric) -->
+<!-- FOOTER / METADATA (provenance + last updated) -->
 <div class="footer" style="margin-top:24px;">
   <p>Data: <a href="DV2_NEW_DATA.csv">DV2_NEW_DATA.csv</a> | Built with Vega-Lite</p>
   <p class="meta">
@@ -234,7 +234,7 @@ function mapSpec(widthPx){
           { "filter": "isDate(datum._date)" },               /* drop rows with invalid dates */
           { "calculate": "year(datum._date)", "as": "Year" },/* extract year for filtering */
 
-          /* Aboard (prefer total if present; else sum passengers+crew) */
+          /* Aboard (prefer total if present else sum passengers+crew) */
           { "calculate": "toNumber(replace(datum['Aboard'] || '', /[^0-9.\\-]/g, ''))", "as": "_aboardA" },
           { "calculate": "toNumber(replace(datum['Aboard Pa'] || '', /[^0-9.\\-]/g, ''))", "as": "_aboardP" },
           { "calculate": "toNumber(replace(datum['Aboard Cr'] || '', /[^0-9.\\-]/g, ''))", "as": "_aboardC" },
@@ -276,7 +276,7 @@ function mapSpec(widthPx){
 /* LINE SPEC
    Purpose: show macro trends (fatalities vs crash counts) by year.
    Technique:
-   - Compute Year, then aggregate once so both measures share rows (clean tooltips).
+   - Compute Year, then aggregate once so both measures share rows.
    - Independent y-scales avoid one metric dwarfing the other.
 */
 const specLine = {
@@ -292,7 +292,7 @@ const specLine = {
     { "filter": "isDate(datum._date)" },
     { "calculate": "year(datum._date)", "as": "Year" },
 
-    /* Onboard fatalities with fallback from Pa+Cr if needed */
+    /* Onboard fatalities with fallback if needed */
     { "calculate": "toNumber(replace(datum['Fatalities'] || '', /[^0-9.\\-]/g, ''))", "as": "_fatT" },
     { "calculate": "toNumber(replace(datum['Fatalities Pa'] || '', /[^0-9.\\-]/g, ''))", "as": "_fatP" },
     { "calculate": "toNumber(replace(datum['Fatalities Cr'] || '', /[^0-9.\\-]/g, ''))", "as": "_fatC" },
@@ -345,7 +345,7 @@ const specScatter = {
     { "calculate": "datum.Date || ''", "as": "_dateRaw" },
     { "calculate": "timeParse(datum._dateRaw, '%m/%d/%Y') || timeParse(datum._dateRaw, '%Y-%m-%d') || timeParse(datum._dateRaw, '%d/%m/%Y')", "as": "_date" },
 
-    /* Aboard with fallback from Pa+Cr if total missing */
+    /* Aboard with fallback if total missing */
     { "calculate": "toNumber(replace(datum['Aboard'] || '', /[^0-9.\\-]/g, ''))", "as": "_aboardA" },
     { "calculate": "toNumber(replace(datum['Aboard Pa'] || '', /[^0-9.\\-]/g, ''))", "as": "_aboardP" },
     { "calculate": "toNumber(replace(datum['Aboard Cr'] || '', /[^0-9.\\-]/g, ''))", "as": "_aboardC" },
@@ -420,7 +420,7 @@ const specHeatmap = {
 };
 
 /* TOP OPERATORS BAR CHART
-   Purpose: rank operators by count (top 20) using a window rank.
+   Purpose: rank operators by count (top 20).
 */
 const specOperator = {
   "$schema":"https://vega.github.io/schema/vega-lite/v5.json",
@@ -443,7 +443,7 @@ const specOperator = {
 };
 
 /* RENDER ALL CHARTS
-   - We compute a comfortable map width (min 700px) for legibility.
+   - Compute a comfortable map width (min 700px) for legibility.
    - Each vegaEmbed returns a promise; we catch to expose errors in friendly divs.
    - We rerun on resize for responsive charts.
 */
@@ -463,7 +463,7 @@ function renderAll(){
 renderAll();
 window.addEventListener('resize', renderAll); /* simple responsiveness */
 
-/* Footer: populate “last updated” with the user's locale format */
+/* Footer: populate “last updated” */
 (function(){
   const el=document.getElementById('lastUpdated');
   if(el){
