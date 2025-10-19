@@ -11,9 +11,9 @@
   <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
 
   <style>
-    /* THEME: CSS variables make colour tweaks trivial across the page */
+    /* THEME - Make colour tweaks across the page */
     :root { --fg:#111; --muted:#444; --bg:#e6f2ff; }
-    * { box-sizing: border-box; } /* predictable layout: padding/border inside width/height */
+    * { box-sizing: border-box; } /* predictable layout - border inside width/height */
 
     /* Base typography + page background */
     body {
@@ -21,7 +21,7 @@
       margin:0; padding:24px; color:var(--fg); background:var(--bg); line-height:1.6;
     }
 
-    /* Constrain page width and centre major blocks */
+    /* Constrain page width */
     header, .viz-wrap, .footer { max-width:1100px; margin:0 auto; }
     header { margin-bottom:16px; text-align:center; }
 
@@ -35,14 +35,14 @@
     p { margin:8px 0; color:var(--muted); }
     .note{ margin-top:2px; font-size:14px; color:#556 }
 
-    /* Callout boxes for key insights / narrative scaffolding */
+    /* Callout boxes for key insights */
     .callout{
       margin-top:10px; padding:10px 12px; background:#f2f7ff; border:1px solid #cfe1ff;
       border-radius:10px; font-size:14px; color:#234;
     }
     .callout strong{ color:#0a2740 }
 
-    /* Flip-card infographic: light interactivity that doesn't distract from the charts */
+    /* Flip-card infographic */
     .infographic-row { display:flex; justify-content:space-between; gap:16px; margin:28px 0 32px 0; }
     .flip-card { width:33%; height:220px; perspective:1000px; } /* perspective enables 3D flip illusion */
     .flip-inner { position:relative; width:100%; height:100%; transition:transform .8s; transform-style:preserve-3d; }
@@ -76,7 +76,7 @@
     /* Error text (shown only if an embed throws) */
     .error { color:#b00020; white-space:pre-wrap; margin-top:12px; display:none; }
 
-    /* Footer metadata satisfies rubric: data source, author, updated date */
+    /* Footer metadata: data source, author, updated date */
     .meta { margin-top:6px; font-size:14px; color:#556; }
     .meta a { color:#0a2740; text-decoration:underline; }
     .meta small{ display:block; color:#667 }
@@ -87,7 +87,7 @@
   <h1>Global Plane Crashes ✈︎ (1908 – 2023)</h1>
   <p>Visualising over a century of aviation incidents worldwide.</p>
 
-  <!-- INFOGRAPHIC: small interactive context; not essential for analysis -->
+  <!-- INFOGRAPHIC: small interactive context -->
   <div class="infographic-row">
     <div class="flip-card">
       <div class="flip-inner">
@@ -115,7 +115,7 @@
     </div>
   </div>
 
-  <!-- Reader onboarding: tells the user how to consume the dashboard (storytelling rubric) -->
+  <!-- Reader onboarding: tells the user how to consume the dashboard (storytelling) -->
   <div class="panel" style="text-align:left">
     <h2>How to Read this Dashboard</h2>
     <p class="note">
@@ -125,7 +125,7 @@
     </p>
   </div>
 
-  <!-- Key takeaways up-front (sets expectations / narrative) -->
+  <!-- Key takeaways up-front (narrative) -->
   <div class="panel" style="text-align:left">
     <h2>Key Insights at a Glance</h2>
     <div class="callout">
