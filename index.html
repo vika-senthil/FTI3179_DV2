@@ -5,81 +5,39 @@
   <title>Global Plane Crashes ✈︎ (1908 – 2023)</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-  <!-- Vega core runtime (executes compiled specs), Vega-Lite (declarative grammar), and vega-embed (mount helper) -->
+  <!-- Vega runtime, Vega-Lite grammar, and helper to mount charts -->
   <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
   <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
   <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
 
   <style>
-    /* THEME */
     :root { --fg:#111; --muted:#444; --bg:#e6f2ff; }
-    * { box-sizing: border-box; } /* border inside width/height */
-
-    /* Base typography + page background */
-    body {
-      font-family: system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
-      margin:0; padding:24px; color:var(--fg); background:var(--bg); line-height:1.6;
-    }
-
-    /* Constrain page width */
+    * { box-sizing: border-box; }
+    body { font-family: system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif; margin:0; padding:24px; color:var(--fg); background:var(--bg); line-height:1.6; }
     header, .viz-wrap, .footer { max-width:1100px; margin:0 auto; }
     header { margin-bottom:16px; text-align:center; }
-
-    /* Big Title-like H1 to satisfy “clear title” rubric */
-    h1 {
-      margin:0 0 8px 0;
-      font-size:48px; font-weight:800; letter-spacing:1px; text-transform:uppercase;
-      color:#0a2740; text-shadow:1px 2px 6px rgba(0,0,0,0.15);
-    }
+    h1 { margin:0 0 8px 0; font-size:48px; font-weight:800; letter-spacing:1px; text-transform:uppercase; color:#0a2740; text-shadow:1px 2px 6px rgba(0,0,0,0.15); }
     h2 { margin:0 0 8px 0; font-size:22px; }
     p { margin:8px 0; color:var(--muted); }
-    .note{ margin-top:2px; font-size:14px; color:#556 }
-
-    /* Callout boxes for key insights */
-    .callout{
-      margin-top:10px; padding:10px 12px; background:#f2f7ff; border:1px solid #cfe1ff;
-      border-radius:10px; font-size:14px; color:#234;
-    }
+    .note{ font-size:14px; color:#556 }
+    .callout{ margin-top:10px; padding:10px 12px; background:#f2f7ff; border:1px solid #cfe1ff; border-radius:10px; font-size:14px; color:#234; }
     .callout strong{ color:#0a2740 }
-
-    /* Flip-card infographic */
     .infographic-row { display:flex; justify-content:space-between; gap:16px; margin:28px 0 32px 0; }
-    .flip-card { width:33%; height:220px; perspective:1000px; } /* perspective enables 3D flip illusion */
+    .flip-card { width:33%; height:220px; perspective:1000px; }
     .flip-inner { position:relative; width:100%; height:100%; transition:transform .8s; transform-style:preserve-3d; }
-    .flip-card:hover .flip-inner { transform:rotateY(180deg); } /* the actual flip on hover */
-    .flip-front, .flip-back {
-      position:absolute; inset:0; border-radius:14px; border:2px solid #ccc; box-shadow:0 2px 8px rgba(0,0,0,.05);
-      display:flex; flex-direction:column; align-items:center; justify-content:center;
-      padding:20px; text-align:center; font-weight:600; -webkit-backface-visibility:hidden; backface-visibility:hidden;
-    }
+    .flip-card:hover .flip-inner { transform:rotateY(180deg); }
+    .flip-front, .flip-back { position:absolute; inset:0; border-radius:14px; border:2px solid #ccc; box-shadow:0 2px 8px rgba(0,0,0,.05); display:flex; flex-direction:column; align-items:center; justify-content:center; padding:20px; text-align:center; font-weight:600; -webkit-backface-visibility:hidden; backface-visibility:hidden; }
     .flip-front { background:#fff; color:#333; font-size:18px; }
     .flip-front span { font-size:36px; margin-bottom:10px; }
     .flip-front small { color:#777; font-size:13px; margin-top:8px; }
     .flip-back { background:#1f77b4; color:#fff; transform:rotateY(180deg); font-size:14px; line-height:1.4; }
-
-    /* Card panels around visual sections for visual grouping */
-    .panel {
-      background:#fff; border-radius:14px; border:1px solid #eee;
-      box-shadow:0 4px 18px rgba(0,0,0,.07);
-      padding:16px; margin:16px auto;
-    }
-
-    /* Chart grid: 2 columns on desktop, 1 column on small screens for readability */
+    .panel { background:#fff; border-radius:14px; border:1px solid #eee; box-shadow:0 4px 18px rgba(0,0,0,.07); padding:16px; margin:16px auto; }
     .charts { display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); gap:16px; }
     .chart { min-width:0; width:100%; }
-    @media (max-width:900px){
-      .charts { grid-template-columns:1fr; }
-      .infographic-row { flex-direction:column; }
-      .flip-card { width:100%; }
-    }
-
-    /* Error text (shown only if an embed throws) */
+    @media (max-width:900px){ .charts { grid-template-columns:1fr; } .infographic-row { flex-direction:column; } .flip-card { width:100%; } }
     .error { color:#b00020; white-space:pre-wrap; margin-top:12px; display:none; }
-
-    /* Footer metadata: data source, author, updated date */
     .meta { margin-top:6px; font-size:14px; color:#556; }
     .meta a { color:#0a2740; text-decoration:underline; }
-    .meta small{ display:block; color:#667 }
   </style>
 </head>
 <body>
@@ -87,80 +45,61 @@
   <h1>Global Plane Crashes ✈︎ (1908 – 2023)</h1>
   <p>Visualising over a century of aviation incidents worldwide.</p>
 
-  <!-- INFOGRAPHIC: small interactive context -->
+  <!-- Flip-cards are decorative/contextual; not essential to VL but nice to mention in viva -->
   <div class="infographic-row">
-    <div class="flip-card">
-      <div class="flip-inner">
-        <div class="flip-front"><span>✈️</span>Tenerife Airport Disaster<small>(Hover over me)</small></div>
-        <div class="flip-back">
-          <div><strong>Year:</strong> 1977<br><strong>Operator:</strong> KLM & Pan Am<br><strong>Aboard:</strong> 644<br><strong>Deaths:</strong> 583<br><em>Two Boeing 747s collided in fog, one of the deadliest crash in history.</em></div>
-        </div>
-      </div>
-    </div>
-    <div class="flip-card">
-      <div class="flip-inner">
-        <div class="flip-front"><span>🛫</span>Japan Airlines Flight 123<small>(Hover over me)</small></div>
-        <div class="flip-back">
-          <div><strong>Year:</strong> 1985<br><strong>Operator:</strong> Japan Airlines<br><strong>Aboard:</strong> 524<br><strong>Deaths:</strong> 520<br><em>Decompression led to loss of control and crash into mountainous terrain.</em></div>
-        </div>
-      </div>
-    </div>
-    <div class="flip-card">
-      <div class="flip-inner">
-        <div class="flip-front"><span>🛩️</span>Charkhi Dadri Collision<small>(Hover over me)</small></div>
-        <div class="flip-back">
-          <div><strong>Year:</strong> 1996<br><strong>Operator:</strong> Saudi Arabian & Kazakhstan Airlines<br><strong>Aboard:</strong> 349<br><strong>Deaths:</strong> 349<br><em>Two jets collided near New Delhi, one of the worst mid-air disasters.</em></div>
-        </div>
-      </div>
-    </div>
+    <div class="flip-card"><div class="flip-inner">
+      <div class="flip-front"><span>✈️</span>Tenerife Airport Disaster<small>(Hover)</small></div>
+      <div class="flip-back"><div><strong>Year:</strong> 1977<br><strong>Operator:</strong> KLM & Pan Am<br><strong>Aboard:</strong> 644<br><strong>Deaths:</strong> 583</div></div>
+    </div></div>
+    <div class="flip-card"><div class="flip-inner">
+      <div class="flip-front"><span>🛫</span>JAL Flight 123<small>(Hover)</small></div>
+      <div class="flip-back"><div><strong>Year:</strong> 1985<br><strong>Operator:</strong> Japan Airlines<br><strong>Aboard:</strong> 524<br><strong>Deaths:</strong> 520</div></div>
+    </div></div>
+    <div class="flip-card"><div class="flip-inner">
+      <div class="flip-front"><span>🛩️</span>Charkhi Dadri<small>(Hover)</small></div>
+      <div class="flip-back"><div><strong>Year:</strong> 1996<br><strong>Operator:</strong> SV & KZ<br><strong>Aboard/Deaths:</strong> 349</div></div>
+    </div></div>
   </div>
 
-  <!-- Reader onboarding: tells the user how to consume the dashboard (storytelling) -->
   <div class="panel" style="text-align:left">
     <h2>How to Read this Dashboard</h2>
-    <p class="note">
-      1) Start with the <strong>map</strong> and move the year slider to see when and where events were recorded.<br>
-      2) Compare <strong>fatalities vs. crash counts</strong> over time (left) then examine <strong>severity</strong> (right).<br>
-      3) Explore <strong>seasonality by decade</strong> and <strong>operator patterns</strong>.
-    </p>
+    <p class="note">Map with year slider → trends (line) → severity (scatter) → seasonality (heatmap) → operators (bar).
+      This sequence is helpful to explain in the interview.</p>
   </div>
 
-  <!-- Key takeaways up-front (narrative) -->
   <div class="panel" style="text-align:left">
     <h2>Key Insights at a Glance</h2>
     <div class="callout">
       <ul style="margin:0 0 0 18px;padding:0">
-        <li><strong>Concentration & Reporting:</strong> Records cluster along high traffic routes and various regions.</li>
-        <li><strong>Safety Improvements:</strong> Fatalities and crash counts decline markedly post 1980s.</li>
-        <li><strong>Severity Envelope:</strong> Most events fall well below the “all aboard” line; catastrophic events are rare.</li>
-        <li><strong>Seasonality & Operators:</strong> Subtle monthly trends emerge and a few operators dominate historic totals.</li>
+        <li><strong>Concentration:</strong> clusters align with traffic corridors.</li>
+        <li><strong>Safety improvements:</strong> totals drop post-1980s.</li>
+        <li><strong>Severity envelope:</strong> most crashes are below the “all aboard” line.</li>
+        <li><strong>Seasonality/operators:</strong> subtle monthly patterning; a few operators dominate counts.</li>
       </ul>
     </div>
   </div>
 </header>
 
-<!-- MAP SECTION -->
+<!-- Mount points for Vega-Lite charts -->
 <div class="viz-wrap panel">
   <h2>Crash Locations & Fatalities (Map)</h2>
-  <p class="note">Use the year slider to explore. Larger / darker circles = more fatalities; clusters align with major flight corridors.</p>
+  <p class="note">Interactive filter via a bound <code>param</code> (year slider). Size & colour ~ onboard fatalities.</p>
   <div id="crash_map" class="chart" aria-label="World map of crash locations"></div>
-  <div id="map_err" class="error"></div> <!-- shows any embed errors -->
+  <div id="map_err" class="error"></div>
 </div>
 
-<!-- TIME SERIES + SEVERITY SECTION -->
 <div class="viz-wrap panel">
   <h2>Fatalities & Crash Numbers Over Time • Aboard vs Fatalities</h2>
-  <p class="note">Left: yearly totals peak mid-20th century then fall. Right: each point = one crash; dashed line = fatalities = aboard.</p>
+  <p class="note">Two-layer line chart uses independent y-scales; scatter uses a y=x reference line.</p>
   <div class="charts">
     <div id="line_chart" class="chart" aria-label="Yearly totals of fatalities and crashes"></div>
     <div id="scatter_chart" class="chart" aria-label="Crash severity scatter plot"></div>
   </div>
 </div>
 
-<!-- SEASONALITY + OPERATORS SECTION -->
 <div class="viz-wrap panel">
   <h2>Crash Frequency by Month × Decade • Top Operators</h2>
-  <p class="note">Left: heatmap shows subtle seasonality; Right: bars rank operators by total recorded crashes.</p>
+  <p class="note">Heatmap aggregates counts by month/decade; operator bars rank with a window <code>rank</code>.</p>
   <div class="charts">
     <div id="heatmap" class="chart" aria-label="Heatmap of crashes by month and decade"></div>
     <div>
@@ -168,104 +107,74 @@
       <div id="operator_err" class="error"></div>
     </div>
   </div>
-  <div class="callout"><strong>Context:</strong> Operator counts depend on fleet size, routes, and reporting era.</div>
 </div>
 
-<!-- FOOTER / METADATA (provenance + last updated) -->
 <div class="footer" style="margin-top:24px;">
   <p>Data: <a href="DV2_NEW_DATA.csv">DV2_NEW_DATA.csv</a> | Built with Vega-Lite</p>
-  <p class="meta">
-    Author: <strong>Rithvika Senthil</strong> · Last updated: <span id="lastUpdated"></span><br>
-    Methods: Date parsed + coordinates normalised. Aggregated by year/decade + top-20 operators.<br>
-    Source: Local compiled CSV (original Kaggle base dataset).
-  </p>
+  <p class="meta">Author: <strong>Rithvika Senthil</strong> · Last updated: <span id="lastUpdated"></span><br>Methods: Dates parsed; coordinates normalised; aggregates by year/decade; top-20 operators (rank window).</p>
 </div>
 
 <script>
-/* ============================================================
-   VEGA-LITE SPECS + RENDERING
-   Notes:
-   - Each spec is a plain JS object validated by the Vega-Lite schema.
-   - We use minimal JS: define specs, then mount with vegaEmbed().
-   ============================================================ */
-
-/* MAP SPEC
-   Purpose:
-   - Show spatial distribution for a selected year.
-   Key ideas:
-   - A bound parameter (range slider) controls the Year.
-   - Robust parsing: tolerate multiple date formats.
-   - Compute onboard totals from either overall totals or Pa+Cr fallback.
-*/
-function mapSpec(widthPx){
+// ===============================
+// SPEC 1: MAP with year slider
+// ===============================
+function mapSpec(){
   return {
-    "$schema":"https://vega.github.io/schema/vega-lite/v5.json",
-    "description":"Map of crash locations for the selected year, sized/colored by onboard fatalities.",
-    "autosize":{"type":"fit","contains":"padding"}, /* responsive width within panel */
-    "width":widthPx,"height":560,
-    "projection":{"type":"equalEarth"},             /* nice area-balanced world projection */
+    $schema: "https://vega.github.io/schema/vega-lite/v5.json",
+    description: "Map of crash locations filtered by selected year.",
+    autosize: { type: "fit", contains: "padding" }, // responsive inside container
+    width: "container", height: 560,
+    projection: { type: "equalEarth" },
 
-    /* PARAM: binds a native HTML <input type=range> to Vega-Lite */
-    "params":[{
-      "name":"yearSel", "value":1950,
-      "bind":{"input":"range","min":1908,"max":2023,"step":1,"name":"Year: "}
+    // PARAM: creates a native <input type=range> bound to this value
+    params: [{
+      name: "yearSel", value: 1950,
+      bind: { input: "range", min: 1908, max: 2023, step: 1, name: "Year: " }
     }],
 
-    "layer":[
-      /* Base world geoshape for context */
+    layer: [
+      // Base world map layer (TopoJSON → geoshape)
       {
-        "data":{"url":"https://cdn.jsdelivr.net/npm/vega-datasets@2.0.0/data/world-110m.json",
-                "format":{"type":"topojson","feature":"countries"}},
-        "mark":{"type":"geoshape","fill":"#e6e6e6","stroke":"white"}
+        data: { url: "https://cdn.jsdelivr.net/npm/vega-datasets@2.0.0/data/world-110m.json",
+                format: { type: "topojson", feature: "countries" } },
+        mark: { type: "geoshape", fill: "#e6e6e6", stroke: "white" }
       },
-
-      /* Crash points for the selected year */
+      // Crash points layer
       {
-        "data": { "url": "DV2_NEW_DATA.csv", "format": { "type": "csv", "parse": {
-          /* Parse these columns upfront as numbers to avoid repeated toNumber() */
-          "Latitude": "number", "Longitude": "number"
-        }}},
+        data: { url: "DV2_NEW_DATA.csv", format: { type: "csv", parse: { Latitude: "number", Longitude: "number" } } },
+        transform: [
+          // Robust date parsing from multiple formats
+          { calculate: "datum.Date || ''", as: "_dateRaw" },
+          { calculate: "timeParse(datum._dateRaw, '%m/%d/%Y') || timeParse(datum._dateRaw, '%Y-%m-%d') || timeParse(datum._dateRaw, '%d/%m/%Y')", as: "_date" },
+          { filter: "isDate(datum._date)" },
+          { calculate: "year(datum._date)", as: "Year" },
 
-        /* TRANSFORMS: derive fields, filter bad rows, compute totals */
-        "transform":[
-          /* Flexible date parsing: supports MM/DD/YYYY, YYYY-MM-DD, DD/MM/YYYY */
-          { "calculate": "datum.Date || ''", "as": "_dateRaw" },
-          { "calculate": "timeParse(datum._dateRaw, '%m/%d/%Y') || timeParse(datum._dateRaw, '%Y-%m-%d') || timeParse(datum._dateRaw, '%d/%m/%Y')", "as": "_date" },
-          { "filter": "isDate(datum._date)" },               /* drop rows with invalid dates */
-          { "calculate": "year(datum._date)", "as": "Year" },/* extract year for filtering */
+          // Compute Aboard total: prefer total; else passengers+crew
+          { calculate: "toNumber(replace(datum['Aboard'] || '', /[^0-9.\-]/g, ''))", as: "_aboardA" },
+          { calculate: "toNumber(replace(datum['Aboard Pa'] || '', /[^0-9.\-]/g, ''))", as: "_aboardP" },
+          { calculate: "toNumber(replace(datum['Aboard Cr'] || '', /[^0-9.\-]/g, ''))", as: "_aboardC" },
+          { calculate: "(isFinite(datum._aboardA) && datum._aboardA>0) ? datum._aboardA : ((isFinite(datum._aboardP)?datum._aboardP:0) + (isFinite(datum._aboardC)?datum._aboardC:0))", as: "AboardNum" },
 
-          /* Aboard (prefer total if present else sum passengers+crew) */
-          { "calculate": "toNumber(replace(datum['Aboard'] || '', /[^0-9.\\-]/g, ''))", "as": "_aboardA" },
-          { "calculate": "toNumber(replace(datum['Aboard Pa'] || '', /[^0-9.\\-]/g, ''))", "as": "_aboardP" },
-          { "calculate": "toNumber(replace(datum['Aboard Cr'] || '', /[^0-9.\\-]/g, ''))", "as": "_aboardC" },
-          { "calculate": "(isFinite(datum._aboardA) && datum._aboardA>0) ? datum._aboardA : ((isFinite(datum._aboardP)?datum._aboardP:0) + (isFinite(datum._aboardC)?datum._aboardC:0))", "as": "AboardNum" },
+          // Compute onboard fatalities (excluding ground), with same fallback
+          { calculate: "toNumber(replace(datum['Fatalities'] || '', /[^0-9.\-]/g, ''))", as: "_fatT" },
+          { calculate: "toNumber(replace(datum['Fatalities Pa'] || '', /[^0-9.\-]/g, ''))", as: "_fatP" },
+          { calculate: "toNumber(replace(datum['Fatalities Cr'] || '', /[^0-9.\-]/g, ''))", as: "_fatC" },
+          { calculate: "(isFinite(datum._fatT) && datum._fatT>0) ? datum._fatT : ((isFinite(datum._fatP)?datum._fatP:0) + (isFinite(datum._fatC)?datum._fatC:0))", as: "FatalitiesNum" },
 
-          /* Fatalities onboard only (exclude Ground). Same fallback logic. */
-          { "calculate": "toNumber(replace(datum['Fatalities'] || '', /[^0-9.\\-]/g, ''))", "as": "_fatT" },
-          { "calculate": "toNumber(replace(datum['Fatalities Pa'] || '', /[^0-9.\\-]/g, ''))", "as": "_fatP" },
-          { "calculate": "toNumber(replace(datum['Fatalities Cr'] || '', /[^0-9.\\-]/g, ''))", "as": "_fatC" },
-          { "calculate": "(isFinite(datum._fatT) && datum._fatT>0) ? datum._fatT : ((isFinite(datum._fatP)?datum._fatP:0) + (isFinite(datum._fatC)?datum._fatC:0))", "as": "FatalitiesNum" },
-
-          /* Keep only the chosen year and valid coordinates */
-          { "filter": "datum.Year == yearSel" },
-          { "filter": "isFinite(datum.Latitude) && isFinite(datum.Longitude)" }
+          // Interactivity + data hygiene
+          { filter: "datum.Year == yearSel" },
+          { filter: "isFinite(datum.Latitude) && isFinite(datum.Longitude)" }
         ],
-
-        /* MARK + ENCODING: circle size/colour reflect severity (Fatalities) */
-        "mark":{"type":"circle","opacity":0.7},
-        "encoding":{
-          "longitude":{"field":"Longitude","type":"quantitative"},
-          "latitude":{"field":"Latitude","type":"quantitative"},
-          "size":{"field":"FatalitiesNum","type":"quantitative","scale":{"range":[12,900]}},
-          "color":{"field":"FatalitiesNum","type":"quantitative","scale":{"scheme":"reds"}},
-          "tooltip":[
-            {"field":"_date","title":"Date"},
-            {"field":"Time"},
-            {"field":"Location"},
-            {"field":"Operator"},
-            {"field":"AboardNum","title":"Aboard"},
-            {"field":"FatalitiesNum","title":"Fatalities (onboard)"},
-            {"field":"Ground","title":"Ground Fatalities"}
+        mark: { type: "circle", opacity: 0.7 },
+        encoding: {
+          longitude: { field: "Longitude", type: "quantitative" },
+          latitude:  { field: "Latitude",  type: "quantitative" },
+          size:  { field: "FatalitiesNum", type: "quantitative", scale: { range: [12, 900] } },
+          color: { field: "FatalitiesNum", type: "quantitative", scale: { scheme: "reds" } },
+          tooltip: [
+            { field: "_date", title: "Date" }, { field: "Time" }, { field: "Location" },
+            { field: "Operator" }, { field: "AboardNum", title: "Aboard" },
+            { field: "FatalitiesNum", title: "Fatalities (onboard)" }, { field: "Ground", title: "Ground Fatalities" }
           ]
         }
       }
@@ -273,202 +182,134 @@ function mapSpec(widthPx){
   };
 }
 
-/* LINE SPEC
-   Purpose: show macro trends (fatalities vs crash counts) by year.
-   Technique:
-   - Compute Year, then aggregate once so both measures share rows.
-   - Independent y-scales avoid one metric dwarfing the other.
-*/
+// ==============================================
+// SPEC 2: YEARLY TOTALS (dual‑axis layered lines)
+// ==============================================
 const specLine = {
-  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  "description": "Yearly totals: fatalities (left axis) and number of crashes (right axis).",
-  "width": "container",
-  "height": 320,
-  "data": { "url": "DV2_NEW_DATA.csv", "format": { "type": "csv" } },
-  "transform": [
-    /* Derive a valid date and its year */
-    { "calculate": "datum.Date || ''", "as": "_dateRaw" },
-    { "calculate": "timeParse(datum._dateRaw, '%m/%d/%Y') || timeParse(datum._dateRaw, '%Y-%m-%d') || timeParse(datum._dateRaw, '%d/%m/%Y')", "as": "_date" },
-    { "filter": "isDate(datum._date)" },
-    { "calculate": "year(datum._date)", "as": "Year" },
-
-    /* Onboard fatalities with fallback if needed */
-    { "calculate": "toNumber(replace(datum['Fatalities'] || '', /[^0-9.\\-]/g, ''))", "as": "_fatT" },
-    { "calculate": "toNumber(replace(datum['Fatalities Pa'] || '', /[^0-9.\\-]/g, ''))", "as": "_fatP" },
-    { "calculate": "toNumber(replace(datum['Fatalities Cr'] || '', /[^0-9.\\-]/g, ''))", "as": "_fatC" },
-    { "calculate": "(isFinite(datum._fatT) && datum._fatT>0) ? datum._fatT : ((isFinite(datum._fatP)?datum._fatP:0) + (isFinite(datum._fatC)?datum._fatC:0))", "as": "FatalitiesNum" },
-
-    /* Single aggregate pass per Year provides both series in one table */
-    {
-      "aggregate": [
-        { "op": "sum", "field": "FatalitiesNum", "as": "Fatalities" },
-        { "op": "count", "as": "Crashes" }
-      ],
-      "groupby": ["Year"]
-    }
+  $schema: "https://vega.github.io/schema/vega-lite/v5.json",
+  description: "Yearly totals: fatalities (sum) vs crashes (count).",
+  width: "container", height: 320,
+  data: { url: "DV2_NEW_DATA.csv", format: { type: "csv" } },
+  transform: [
+    { calculate: "datum.Date || ''", as: "_dateRaw" },
+    { calculate: "timeParse(datum._dateRaw, '%m/%d/%Y') || timeParse(datum._dateRaw, '%Y-%m-%d') || timeParse(datum._dateRaw, '%d/%m/%Y')", as: "_date" },
+    { filter: "isDate(datum._date)" },
+    { calculate: "year(datum._date)", as: "Year" },
+    // Create onboard fatalities per row, then aggregate once per Year
+    { calculate: "toNumber(replace(datum['Fatalities'] || '', /[^0-9.\-]/g, ''))", as: "_fatT" },
+    { calculate: "toNumber(replace(datum['Fatalities Pa'] || '', /[^0-9.\-]/g, ''))", as: "_fatP" },
+    { calculate: "toNumber(replace(datum['Fatalities Cr'] || '', /[^0-9.\-]/g, ''))", as: "_fatC" },
+    { calculate: "(isFinite(datum._fatT) && datum._fatT>0) ? datum._fatT : ((isFinite(datum._fatP)?datum._fatP:0) + (isFinite(datum._fatC)?datum._fatC:0))", as: "FatalitiesNum" },
+    { aggregate: [ { op: "sum", field: "FatalitiesNum", as: "Fatalities" }, { op: "count", as: "Crashes" } ], groupby: ["Year"] }
   ],
-  "resolve": { "scale": { "y": "independent" } }, /* separate y-axes */
-  "layer": [
-    /* Fatalities (left axis) */
-    {
-      "mark": { "type": "line", "point": true, "strokeWidth": 2, "color": "#d62728" },
-      "encoding": {
-        "x": { "field": "Year", "type": "quantitative" },
-        "y": { "field": "Fatalities", "type": "quantitative", "axis": { "title": "Fatalities (sum / year)" } },
-        "tooltip": [ { "field": "Year" }, { "field": "Fatalities" }, { "field": "Crashes" } ]
-      }
-    },
-    /* Crashes (right axis) */
-    {
-      "mark": { "type": "line", "point": true, "strokeWidth": 2, "color": "#1f77b4" },
-      "encoding": {
-        "x": { "field": "Year", "type": "quantitative" },
-        "y": { "field": "Crashes", "type": "quantitative", "axis": { "title": "Crashes (count / year)", "orient": "right" } }
-      }
-    }
+  resolve: { scale: { y: "independent" } }, // use dual y-axes
+  layer: [
+    { mark: { type: "line", point: true, strokeWidth: 2, color: "#d62728" },
+      encoding: { x: { field: "Year", type: "quantitative" }, y: { field: "Fatalities", type: "quantitative", axis: { title: "Fatalities (sum/year)" } }, tooltip: [ { field: "Year" }, { field: "Fatalities" }, { field: "Crashes" } ] } },
+    { mark: { type: "line", point: true, strokeWidth: 2, color: "#1f77b4" },
+      encoding: { x: { field: "Year", type: "quantitative" }, y: { field: "Crashes", type: "quantitative", axis: { title: "Crashes (count/year)", orient: "right" } } } }
   ]
 };
 
-/* SCATTER SPEC
-   Purpose: show severity distribution at the crash level.
-   Technique:
-   - Compute Aboard and Fatalities per row using robust fallbacks.
-   - Add a dashed y=x reference (the “all aboard” line).
-*/
+// ======================================
+// SPEC 3: SCATTER (severity with y=x ref)
+// ======================================
 const specScatter = {
-  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  "description": "Crash-level severity: Aboard vs Fatalities with y=x reference.",
-  "width": "container",
-  "height": 320,
-  "data": { "url": "DV2_NEW_DATA.csv", "format": { "type": "csv" } },
-  "transform": [
-    { "calculate": "datum.Date || ''", "as": "_dateRaw" },
-    { "calculate": "timeParse(datum._dateRaw, '%m/%d/%Y') || timeParse(datum._dateRaw, '%Y-%m-%d') || timeParse(datum._dateRaw, '%d/%m/%Y')", "as": "_date" },
-
-    /* Aboard with fallback if total missing */
-    { "calculate": "toNumber(replace(datum['Aboard'] || '', /[^0-9.\\-]/g, ''))", "as": "_aboardA" },
-    { "calculate": "toNumber(replace(datum['Aboard Pa'] || '', /[^0-9.\\-]/g, ''))", "as": "_aboardP" },
-    { "calculate": "toNumber(replace(datum['Aboard Cr'] || '', /[^0-9.\\-]/g, ''))", "as": "_aboardC" },
-    { "calculate": "(isFinite(datum._aboardA) && datum._aboardA>0) ? datum._aboardA : ((isFinite(datum._aboardP)?datum._aboardP:0) + (isFinite(datum._aboardC)?datum._aboardC:0))", "as": "AboardNum" },
-
-    /* Fatalities onboard only */
-    { "calculate": "toNumber(replace(datum['Fatalities'] || '', /[^0-9.\\-]/g, ''))", "as": "_fatT" },
-    { "calculate": "toNumber(replace(datum['Fatalities Pa'] || '', /[^0-9.\\-]/g, ''))", "as": "_fatP" },
-    { "calculate": "toNumber(replace(datum['Fatalities Cr'] || '', /[^0-9.\\-]/g, ''))", "as": "_fatC" },
-    { "calculate": "(isFinite(datum._fatT) && datum._fatT>0) ? datum._fatT : ((isFinite(datum._fatP)?datum._fatP:0) + (isFinite(datum._fatC)?datum._fatC:0))", "as": "FatalitiesNum" },
-
-    /* Keep only complete numeric rows */
-    { "filter": "isFinite(datum.AboardNum) && isFinite(datum.FatalitiesNum)" }
+  $schema: "https://vega.github.io/schema/vega-lite/v5.json",
+  description: "Crash-level severity: Aboard vs Fatalities with y=x line.",
+  width: "container", height: 320,
+  data: { url: "DV2_NEW_DATA.csv", format: { type: "csv" } },
+  transform: [
+    { calculate: "datum.Date || ''", as: "_dateRaw" },
+    { calculate: "timeParse(datum._dateRaw, '%m/%d/%Y') || timeParse(datum._dateRaw, '%Y-%m-%d') || timeParse(datum._dateRaw, '%d/%m/%Y')", as: "_date" },
+    // Compute Aboard & Fatalities per row (fallback totals)
+    { calculate: "toNumber(replace(datum['Aboard'] || '', /[^0-9.\-]/g, ''))", as: "_aboardA" },
+    { calculate: "toNumber(replace(datum['Aboard Pa'] || '', /[^0-9.\-]/g, ''))", as: "_aboardP" },
+    { calculate: "toNumber(replace(datum['Aboard Cr'] || '', /[^0-9.\-]/g, ''))", as: "_aboardC" },
+    { calculate: "(isFinite(datum._aboardA) && datum._aboardA>0) ? datum._aboardA : ((isFinite(datum._aboardP)?datum._aboardP:0) + (isFinite(datum._aboardC)?datum._aboardC:0))", as: "AboardNum" },
+    { calculate: "toNumber(replace(datum['Fatalities'] || '', /[^0-9.\-]/g, ''))", as: "_fatT" },
+    { calculate: "toNumber(replace(datum['Fatalities Pa'] || '', /[^0-9.\-]/g, ''))", as: "_fatP" },
+    { calculate: "toNumber(replace(datum['Fatalities Cr'] || '', /[^0-9.\-]/g, ''))", as: "_fatC" },
+    { calculate: "(isFinite(datum._fatT) && datum._fatT>0) ? datum._fatT : ((isFinite(datum._fatP)?datum._fatP:0) + (isFinite(datum._fatC)?datum._fatC:0))", as: "FatalitiesNum" },
+    { filter: "isFinite(datum.AboardNum) && isFinite(datum.FatalitiesNum)" }
   ],
-  "layer": [
-    /* Reference diagonal y=x showing the theoretical maximum */
-    {
-      "mark": { "type": "line", "strokeDash": [4,4], "opacity": 0.7 },
-      "data": { "values": [ { "x": 0, "y": 0 }, { "x": 650, "y": 650 } ] }, /* domain cap for readability */
-      "encoding": {
-        "x": { "field": "x", "type": "quantitative", "title": "Aboard", "scale": { "domain": [0, 650] } },
-        "y": { "field": "y", "type": "quantitative", "title": "Fatalities (onboard)", "scale": { "domain": [0, 650] } }
-      }
-    },
-    /* Actual crash points */
-    {
-      "mark": { "type": "point", "filled": true, "opacity": 0.6, "color": "#1f77b4" },
-      "encoding": {
-        "x": { "field": "AboardNum", "type": "quantitative", "scale": { "domain": [0, 650] } },
-        "y": { "field": "FatalitiesNum", "type": "quantitative", "scale": { "domain": [0, 650] } },
-        "tooltip": [
-          { "field": "_date", "title": "Date" },
-          { "field": "Time" },
-          { "field": "Operator" },
-          { "field": "AboardNum", "title": "Aboard" },
-          { "field": "FatalitiesNum", "title": "Fatalities (onboard)" },
-          { "field": "Ground", "title": "Ground Fatalities" }
-        ]
-      }
-    }
+  layer: [
+    // y=x reference diagonal
+    { mark: { type: "line", strokeDash: [4,4], opacity: 0.7 },
+      data: { values: [ { x: 0, y: 0 }, { x: 650, y: 650 } ] },
+      encoding: { x: { field: "x", type: "quantitative", title: "Aboard", scale: { domain: [0, 650] } }, y: { field: "y", type: "quantitative", title: "Fatalities (onboard)", scale: { domain: [0, 650] } } } },
+    // Points layer
+    { mark: { type: "point", filled: true, opacity: 0.6, color: "#1f77b4" },
+      encoding: { x: { field: "AboardNum", type: "quantitative", scale: { domain: [0, 650] } }, y: { field: "FatalitiesNum", type: "quantitative", scale: { domain: [0, 650] } }, tooltip: [ { field: "_date", title: "Date" }, { field: "Time" }, { field: "Operator" }, { field: "AboardNum", title: "Aboard" }, { field: "FatalitiesNum", title: "Fatalities (onboard)" }, { field: "Ground", title: "Ground Fatalities" } ] } }
   ]
 };
 
-/* HEATMAP SPEC
-   Purpose: reveal seasonality (Month) across decades.
-   Technique:
-   - Derive Month index and Decade, aggregate counts.
-*/
+// ==================================
+// SPEC 4: HEATMAP (Month × Decade)
+// ==================================
 const specHeatmap = {
-  "$schema":"https://vega.github.io/schema/vega-lite/v5.json",
-  "description":"Crash frequency by month and decade.",
-  "width":"container","height":420,
-  "data":{"url":"DV2_NEW_DATA.csv","format":{"type":"csv"}},
-  "transform":[
-    { "calculate": "datum.Date || ''", "as": "_dateRaw" },
-    { "calculate": "timeParse(datum._dateRaw, '%m/%d/%Y') || timeParse(datum._dateRaw, '%Y-%m-%d') || timeParse(datum._dateRaw, '%d/%m/%Y')", "as": "_date" },
-    { "filter": "isDate(datum._date)" },
-    { "calculate": "year(datum._date)", "as": "Year" },
-    { "calculate": "month(datum._date)", "as": "MonthIndex" },      /* 0..11 */
-    { "calculate": "floor(datum.Year/10)*10", "as": "Decade" },     /* e.g., 1980, 1990 */
-    { "aggregate":[{"op":"count","as":"Crashes"}], "groupby":["Decade","MonthIndex"] },
-    { "calculate":"toString(datum.Decade)+'s'","as":"DecadeLabel" },/* "1980s" label */
-    { "calculate":"['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][datum.MonthIndex]","as":"MonthName" }
+  $schema: "https://vega.github.io/schema/vega-lite/v5.json",
+  description: "Crash frequency by month and decade.",
+  width: "container", height: 420,
+  data: { url: "DV2_NEW_DATA.csv", format: { type: "csv" } },
+  transform: [
+    { calculate: "datum.Date || ''", as: "_dateRaw" },
+    { calculate: "timeParse(datum._dateRaw, '%m/%d/%Y') || timeParse(datum._dateRaw, '%Y-%m-%d') || timeParse(datum._dateRaw, '%d/%m/%Y')", as: "_date" },
+    { filter: "isDate(datum._date)" },
+    { calculate: "year(datum._date)", as: "Year" },
+    { calculate: "month(datum._date)", as: "MonthIndex" }, // 0..11
+    { calculate: "floor(datum.Year/10)*10", as: "Decade" }, // e.g., 1980, 1990
+    { aggregate: [ { op: "count", as: "Crashes" } ], groupby: ["Decade","MonthIndex"] },
+    { calculate: "toString(datum.Decade)+'s'", as: "DecadeLabel" },
+    { calculate: "['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][datum.MonthIndex]", as: "MonthName" }
   ],
-  "mark":{"type":"rect"},
-  "encoding":{
-    "x":{"field":"MonthName","type":"ordinal","sort":["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]},
-    "y":{"field":"DecadeLabel","type":"ordinal","sort":{"field":"Decade","order":"ascending"}},
-    "color":{"field":"Crashes","type":"quantitative","scale":{"scheme":"reds"}},
-    "tooltip":[{"field":"DecadeLabel"},{"field":"MonthName"},{"field":"Crashes"}]
+  mark: { type: "rect" },
+  encoding: {
+    x: { field: "MonthName", type: "ordinal", sort: ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"] },
+    y: { field: "DecadeLabel", type: "ordinal", sort: { field: "Decade", order: "ascending" } },
+    color: { field: "Crashes", type: "quantitative", scale: { scheme: "reds" } },
+    tooltip: [ { field: "DecadeLabel" }, { field: "MonthName" }, { field: "Crashes" } ]
   }
 };
 
-/* TOP OPERATORS BAR CHART
-   Purpose: rank operators by count (top 20).
-*/
+// =========================================
+// SPEC 5: TOP OPERATORS (ranked bar chart)
+// =========================================
 const specOperator = {
-  "$schema":"https://vega.github.io/schema/vega-lite/v5.json",
-  "description":"Top operators by recorded crashes (count).",
-  "width":"container","height":420,
-  "data":{"url":"DV2_NEW_DATA.csv","format":{"type":"csv"}},
-  "transform":[
-    {"filter":"isValid(datum.Operator)"},                                  /* ignore empty operator cells */
-    {"aggregate":[{"op":"count","as":"Crashes"}],"groupby":["Operator"]},  /* count rows per operator */
-    {"window":[{"op":"rank","as":"rank"}],"sort":[{"field":"Crashes","order":"descending"}]}, /* rank */
-    {"filter":"datum.rank <= 20"}                                          /* keep top 20 only */
+  $schema: "https://vega.github.io/schema/vega-lite/v5.json",
+  description: "Top operators by recorded crashes (count).",
+  width: "container", height: 420,
+  data: { url: "DV2_NEW_DATA.csv", format: { type: "csv" } },
+  transform: [
+    { filter: "isValid(datum.Operator)" }, // remove blank labels
+    { aggregate: [ { op: "count", as: "Crashes" } ], groupby: ["Operator"] },
+    { window: [ { op: "rank", as: "rank" } ], sort: [ { field: "Crashes", order: "descending" } ] },
+    { filter: "datum.rank <= 20" } // keep top 20
   ],
-  "mark":{"type":"bar"},
-  "encoding":{
-    "y":{"field":"Operator","type":"ordinal","sort":"-x","axis":{"labelLimit":200}},
-    "x":{"field":"Crashes","type":"quantitative"},
-    "color":{"value":"#1f77b4"},
-    "tooltip":[{"field":"Operator"},{"field":"Crashes"}]
+  mark: { type: "bar" },
+  encoding: {
+    y: { field: "Operator", type: "ordinal", sort: "-x", axis: { labelLimit: 200 } },
+    x: { field: "Crashes", type: "quantitative" },
+    color: { value: "#1f77b4" },
+    tooltip: [ { field: "Operator" }, { field: "Crashes" } ]
   }
 };
 
-/* RENDER ALL CHARTS
-   - Compute a comfortable map width (min 700px) for legibility.
-   - Each vegaEmbed returns a promise; we catch to expose errors in friendly divs.
-   - We rerun on resize for responsive charts.
-*/
-function renderAll(){
-  const mapEl=document.getElementById('crash_map');
-  const mapWidth=Math.max(700, mapEl.clientWidth||700);
+// ==========================
+// EMBED all five visuals
+// ==========================
+vegaEmbed('#crash_map', mapSpec())
+  .catch(err => { const el = document.getElementById('map_err'); el.style.display='block'; el.textContent=String(err); });
+vegaEmbed('#line_chart',    specLine);
+vegaEmbed('#scatter_chart', specScatter);
+vegaEmbed('#heatmap',       specHeatmap);
+vegaEmbed('#operator_hist', specOperator)
+  .catch(err => { const el = document.getElementById('operator_err'); el.style.display='block'; el.textContent=String(err); });
 
-  vegaEmbed('#crash_map', mapSpec(mapWidth))
-    .catch(err => { const el=document.getElementById('map_err'); el.style.display='block'; el.textContent=String(err); });
-
-  vegaEmbed('#line_chart',   specLine);
-  vegaEmbed('#scatter_chart',specScatter);
-  vegaEmbed('#heatmap',      specHeatmap);
-  vegaEmbed('#operator_hist',specOperator)
-    .catch(err => { const el=document.getElementById('operator_err'); el.style.display='block'; el.textContent=String(err); });
-}
-renderAll();
-window.addEventListener('resize', renderAll); /* simple responsiveness */
-
-/* Footer: populate “last updated” */
+// Footer timestamp helper
 (function(){
-  const el=document.getElementById('lastUpdated');
-  if(el){
-    el.textContent=new Date().toLocaleDateString(undefined,{year:'numeric',month:'short',day:'numeric'});
-  }
+  const el = document.getElementById('lastUpdated');
+  if(el){ el.textContent = new Date().toLocaleDateString(undefined,{year:'numeric',month:'short',day:'numeric'}); }
 })();
 </script>
 </body>
